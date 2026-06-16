@@ -1,30 +1,44 @@
-pipline{
-agent any
-tools{
-maven'Maven'
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master',
+                    url: 'https://github.com/bit-1BI23CS128/prog10.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Run') {
+            steps {
+                sh 'java -jar target/MyMavenApp0010.jar'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build successful'
+        }
+
+        failure {
+            echo 'Build failed'
+        }
+    }
 }
-stages{
-stage('checkout'){
-steps{
-git branch:'master',url:'https://github.com/bit-1BI23CS128/prog10.git'
-}
-}
-stage('build'){
-steps{
-sh'mvn clean package'
-}}
-stage('test'){
-steps{
-sh'mvn test'
-}}
-stage('run'){
-steps{
-sh'java -jar targat/MyMavenApp0010'
-}}
-post{
-success{
-echo'build successfull'
-}
-failure{
-echo'build failed'
-}}}
